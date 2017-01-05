@@ -1,0 +1,37 @@
+{% extends 'school/base_grade.html' %}
+{% block content %}    
+
+<div class="col-md-9">
+<table cellpadding="0" cellspacing="0" class="table table-striped">
+    <thead>
+        <tr>
+            <th>Student</th>
+            <th>Subject</th>
+            <th>Examsscore</th>
+            <th>Total100</th>
+            <th>Action</th>
+        </tr>
+    </thead>
+    <tbody>
+        
+        {% for grade in grades %}
+        <tr>
+            <td><a href="">{{ grade.student }}</a></td>
+            <td>{{ grade.subject }}</td>
+            <td>{{ grade.examsscore }}</td>
+            <td>{{ grade.total100 }}</td>
+            <td>
+            <a class="btn btn-default" href="{% url 'grade_detail' pk=grade.pk %}"><span class="glyphicon glyphicon-search"></span></a>
+            <a class="btn btn-default" href=""><span class="glyphicon glyphicon-trash"></span></a>
+            </td>
+        <!-- <td>{{ grade.text|linebreaksbr }}</td> -->
+        </tr>
+            {% endfor %}
+        {% endblock %}
+    
+    </tbody>
+    </div> <!-- end col md 9 -->
+    </div><!-- end row -->
+    </div><!-- end containing of content -->
+    </div><!-- /.container -->
+</table>
