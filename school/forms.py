@@ -2,6 +2,8 @@ from django import forms
 from .models import Student
 from .models import Teacher
 from .models import Grade
+from django.contrib.auth.forms import AuthenticationForm 
+
 
 from django.core.urlresolvers import reverse
 from crispy_forms.bootstrap import Field, InlineRadios, TabHolder, Tab
@@ -90,6 +92,7 @@ class GradeForm(forms.ModelForm):
         fields = [
             'student',
             'subject',
+            'sclass',
             'classtest1',
             'classtest2',
             'groupwork',
@@ -119,3 +122,31 @@ class GradeForm(forms.ModelForm):
        #      )
 
 
+
+class ClassSubjectSearchForm(forms.Form):
+    subject = forms.CharField(label='Subject', max_length=100)
+
+
+class SearchForm(forms.Form):
+
+    STUDENT_CLASS = (  
+      ('1A', '1A'),
+      ('2A', '2A'),
+    )
+    
+    STUDENT_SUBJECT = (  
+      ('Maths', 'Maths'),
+      ('Science', 'Science'),
+      ('English', 'English'),
+      ('ICT', 'ICT'),
+      ('French', 'French'),
+    )
+
+    student_sclass = forms.ChoiceField(choices=STUDENT_CLASS)
+    student_subject = forms.ChoiceField(choices=STUDENT_SUBJECT)
+
+
+class LoginForm(AuthenticationForm):
+  username = forms.CharField(label="Username", max_length=30, widget=forms.TextInput(attrs={'class': 'form-control', 'name': 'username'}))
+  password = forms.CharField(label="Password", max_length=30, widget=forms.PasswordInput(attrs={'class': 'form-control', 'name': 'password'}))
+  # password = forms.CharField(label="Password", max_length=30, widget=forms.TextInput(attrs={'class': 'form-control', 'name': 'password'}))

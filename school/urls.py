@@ -5,6 +5,8 @@ from . import views
 
 
 urlpatterns = [
+    url(r'^$', views.home, name="home"),
+
     url(r'^student/$', views.student_list, name='student_list'),
     url(r'^student/(?P<pk>\d+)/detail/$', views.student_detail, name='student_detail'),
     url(r'^student/new/$', views.student_new, name='student_new'),
@@ -18,6 +20,9 @@ urlpatterns = [
     url(r'^teacher/(?P<pk>\d+)/edit/$', views.teacher_edit, name='teacher_edit'),
 
     url(r'^grade/$', views.grade_list, name='grade_list'),
+    url(r'^grade/filter/$', views.grade_filter, name='grade_filter'),
+    # http://127.0.0.1:8000/grade/search/?subject=Maths&sclass=1A
+    # url(r'^grade/search/(?P<subject>\w{1,50})/class/(?P<sclass>\w{1,50})$', views.ClassSubjectSearch, name='ClassSubjectSearch'),
     url(r'^grade/(?P<pk>\d+)/detail/$', views.grade_detail, name='grade_detail'),
     url(r'^grade/new/$', views.grade_new, name='grade_new'),
 ]

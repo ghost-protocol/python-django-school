@@ -1,13 +1,19 @@
 from django.shortcuts import render, get_object_or_404
+from django.http import HttpResponse, HttpResponseRedirect
+
 from django.utils import timezone
 from django.shortcuts import redirect
-from .forms import StudentForm
-from .forms import TeacherForm
-from .forms import GradeForm
 
-from .models import Student
-from .models import Teacher
-from .models import Grade
+from django.contrib.auth.decorators import login_required
+
+from .forms import StudentForm, TeacherForm, GradeForm, SearchForm
+from .models import Student, Teacher, Grade
+
+# this login required decorator is to not allow to any  
+# view without authenticating
+@login_required(login_url="login/")
+def home(request):
+    return render(request,"school/home.html")
 
 #############################student
 def student_list(request):
@@ -83,6 +89,7 @@ def teacher_edit(request, pk):
 ##########################################################
 #############################grade
 def grade_list(request):
+	# grades = Grade.objects.filter(subject="Maths")
 	grades = Grade.objects.order_by('student')
 	return render(request, 'school/grade_list.html', {'grades': grades})
 
@@ -95,7 +102,6 @@ def grade_new(request):
         form = GradeForm(request.POST)
         if form.is_valid():
             grade = form.save(commit=False)
-            # grade.total50 = form.cleaned_data['classtest1']
             grade.total50 = total_50(
             	form.cleaned_data['classtest1'], 
             	form.cleaned_data['classtest2'], 
@@ -116,5 +122,35 @@ def total_50(test1, test2, group, project):
 	sum = float(test1 + test2 + group + project)
 	return(sum * 0.5)
 
-# def exams_50(examscore):
-# 	return(float(examscore * 0.5))
+def grade_filter(request):
+    if request.method == "GET":
+        subject = request.GET.get('subject','')
+        sclass = request.GET.get('sclass','')
+        grades = Grade.objects.filter(subject=subject, sclass=sclass)
+        return render(request, 'school/grade_list.html', {'grades':grades})
+        # message = "You searched for: %s" % request.GET.get('subject','asdasdasdas')
+        # message = "You searched for: %s" % request.GET.get('subject','asdasdasdas')
+        # return HttpResponse(results)
+		# form = SearchForm(request.POST)
+		# if form.is_valid():
+		# 	subject = form.cleaned_data['subject']
+		# 	return render(request, 'school/grade_list.html', {'form': form, 'grades': grades})
+	   # return render(request, 'school/grade_list.html', {'grades': grades})
+
+		# 		# sclass = request.GET.get('sclass', '')
+		# 	sgrades = Grade.objects.all()
+		# 	return render(request, 'school/grade_list.html', {'sgrades': sgrades})
+	# if request.method == "POST":
+	# 	form = ClassSubjectSearchForm(request.POST)
+	# 	if form.is_valid():
+	# 		grades1 = Grade.objects.filter(subject="Maths")
+	# # 		grades = Grade.objects.get(subject="Maths")
+	# 		return render(request, 'school/grade_list.html', {'grades1': grades1})
+
+
+# def contact(request):
+#     form_class = ContactForm
+    
+#     return render(request, 'contact.html', {
+#         'form': form_class,
+#     })

@@ -16,7 +16,21 @@ Including another URLconf
 from django.conf.urls import url, include
 from django.contrib import admin
 
+from django.contrib.auth import views
+from school.forms import LoginForm
+
 urlpatterns = [
-	url(r'', include('school.urls')),
-    url(r'^admin/', admin.site.urls),
+    url(r'^admin/', include(admin.site.urls)),
+    url(r'', include('school.urls')),
+    url(r'^login/$', views.login, {'template_name': 'school/login.html', 'authentication_form': LoginForm}, name='login'),
+    url(r'^logout/$', views.logout, {'next_page': '/login'}),
 ]
+
+# urlpatterns = [
+# 	# url(r'^login/$', auth_views.login, name='login'),
+#     # url(r'^logout/$', auth_views.logout, name='logout'),
+# 	url(r'^admin/', admin.site.urls),
+#     url(r'', include('school.urls')),
+#     url(r'^login/$', views.login, {'template_name': 'login.html', 'authentication_form': LoginForm}),
+#     url(r'^logout/$', views.logout, {'next_page': '/login'}),  
+# ]
